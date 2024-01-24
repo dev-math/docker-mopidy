@@ -34,4 +34,5 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: 01devmath/mopidy
+          enable-url-completion: true
           short-description: ${{ github.event.repository.description }}
