@@ -10,7 +10,6 @@ RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
         gstreamer \
         py3-gobject3 \
         py3-gst \
-        shadow \
         su-exec \
         gst-plugins-bad \
         gst-plugins-good \
