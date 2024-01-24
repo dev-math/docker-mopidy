@@ -49,6 +49,9 @@ In this example:
 - Pulseaudio is used with a shared socket, and my pulseaudio cookie is located in ~/.config/pulse/cookie. You may need to adjust this based on your setup.
 - I'm exposing the MPD port with -p 127.0.0.1:6600:6600 to enable the use of ncmpcpp with Mopidy.
 
+
+---
+
 For more information on setting up sound in Docker with Pulseaudio or ALSA, refer to [Container sound: ALSA or Pulseaudio](https://github.com/mviereck/x11docker/wiki/Container-sound:-ALSA-or-Pulseaudio).
 
 You can find a Mopidy example configuration to use with this container in my [dotfiles](https://github.com/dev-math/dotfiles/blob/main/dot_config/mopidy/mopidy.conf.tmpl).
