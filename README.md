@@ -1,4 +1,6 @@
 # Mopidy Docker Image
+! You can check the Dockerfile on the [GitHub repository](https://github.com/dev-math/docker-mopidy).
+
 Mopidy is a flexible music server that can play music from various sources, including local files, Spotify, SoundCloud, and more. It can be controlled remotely and supports various music player clients.
 
 ![Mopidy Logo](https://raw.githubusercontent.com/mopidy/mopidy/develop/docs/_static/mopidy.png)
