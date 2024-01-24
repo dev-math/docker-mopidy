@@ -23,7 +23,8 @@ $ docker pull 01devmath/mopidy
 
 ### Example usage
 ```bash
-$ docker run --name mopidy-server \
+$ docker run -d --name mopidy-server \
+    -e MOPIDY_ADDONS="Mopidy-MPD Mopidy-YouTube mopidy-ytmusic pytube yt-dlp" \
     -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
     -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
     -v ~/.config/pulse/cookie:/home/mopidy/.config/pulse/cookie \
