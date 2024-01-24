@@ -13,6 +13,7 @@ RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
         py3-gobject3 \
         py3-gst \
         shadow \
+        su-exec \
         gst-plugins-bad \
         gst-plugins-good \
         gst-plugins-ugly \
@@ -21,10 +22,7 @@ RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
     && apk del build-dependencies \
     ;
 
-# Create a user and group with the same IDs as the host user to avoid permission issues
-ARG USER_ID
-ARG GROUP_ID
-RUN addgroup -g $GROUP_ID -S mopidy && adduser -D -u $USER_ID -G mopidy mopidy
-USER mopidy
+COPY docker-entrypoint.sh .
 
-ENTRYPOINT [ "/usr/local/bin/mopidy" ]
+ENTRYPOINT [ "/usr/src/mopidy/docker-entrypoint.sh" ]
+CMD [ "/usr/local/bin/mopidy" ]
