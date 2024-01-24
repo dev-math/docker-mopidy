@@ -5,9 +5,9 @@ set_env_var () {
     local var="$1"
     local value="${2:-}"
 
-    # check if the env var 'var' is set
-    if [ -n "${!var:-}" ]; then
-        value="${!var}"
+    # check if the environment variable 'var' is set
+    if [ -n "$(eval echo "\$$var" 2>/dev/null)" ]; then
+        value="$(eval echo "\$$var")"
     fi
 
     export "$var"="$value"
