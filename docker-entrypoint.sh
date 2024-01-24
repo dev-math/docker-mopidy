@@ -13,15 +13,26 @@ set_env_var () {
     export "$var"="$value"
 }
 
-set_env_var "USER_ID" "9001"
-set_env_var "MOPIDY_ADDONS"
+install_mopidy_addons() {
+    if [ -n "$MOPIDY_ADDONS" ]; then
+        python3 -m pip install --no-cache-dir $MOPIDY_ADDONS
+    fi
+}
 
-if [ -n "$MOPIDY_ADDONS" ]; then 
-    python3 -m pip install --no-cache-dir $MOPIDY_ADDONS; 
-fi 
+create_mopidy_user() {
+    adduser -u "$USER_ID" -D mopidy
+    export HOME=/home/mopidy
+    chown mopidy "$HOME"
+}
 
-adduser -u $USER_ID -D mopidy
-export HOME=/home/mopidy
-chown mopidy $HOME
+main() {
+    set_env_var "USER_ID" "9001"
+    set_env_var "MOPIDY_ADDONS"
 
-exec su-exec mopidy "$@"
+    install_mopidy_addons
+    create_mopidy_user
+
+    exec su-exec mopidy "$@"
+}
+
+main "$@"
