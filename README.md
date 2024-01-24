@@ -1,57 +1,77 @@
 # Mopidy Docker Image
+Mopidy is a flexible music server that can play music from various sources, including local files, Spotify, SoundCloud, and more. It can be controlled remotely and supports various music player clients.
 
-## Building the image
+![Mopidy Logo](https://raw.githubusercontent.com/mopidy/mopidy/develop/docs/_static/mopidy.png)
 
-To build the image, navigate to the repository directory and execute the following command:
+## Table of Contents
 
+-   [How to use this image](#how-to-use-this-image)
+    -   [Getting the image](#getting-the-image)
+    -   [Example usage](#example-usage)
+-   [Configuration](#configuration)
+    -   [Using a custom Mopidy configuration](#using-a-custom-mopidy-configuration)
+    -   [Mopidy addons](#mopidy-addons)
+    -   [Setting Up Sound in the Container](#setting-up-sound-in-the-container)
+-   [License](#license)
+
+## How to use this image
+### Getting the image
+Pull the latest version of the Mopidy image from Docker Hub:
 ```bash
-docker build -t mopidy .
+$ docker pull 01devmath/mopidy
 ```
 
-### Mopidy Addons
-
-You can customize the Mopidy installation by specifying additional addons using the MOPIDY_ADDONS build argument. The addons should be specified following the naming conventions used on PyPI for the respective packages.
-You can find a list of available Mopidy extensions on the [Mopidy Extensions page](https://mopidy.com/ext/).
-
-The default value for MOPIDY_ADDONS is:
+### Example usage
 ```bash
-MOPIDY_ADDONS="Mopidy-MPD Mopidy-YouTube mopidy-ytmusic pytube yt-dlp"
-```
-
-For example, to install "Mopidy-MPD" and "Mopidy-Spotify" you can use the following command:
-
-```bash
-docker build --build-arg MOPIDY_ADDONS="Mopidy-MPD Mopidy-Spotify" -t mopidy .
-```
-
-## Running
-
-### Using your Mopidy config files
-- You can pass your configuration file or directory using a [bind mount](https://docs.docker.com/storage/bind-mounts/#choose-the--v-or---mount-flag).
-
-- By default, Mopidy will look for its configuration file in /home/mopidy/.config/mopidy inside the container. If you want to use a different configuration file or path, you can specify it using the --config flag ([Read Mopidy docs](https://docs.mopidy.com/en/latest/command/)).
-
-- You also need to set the `LOCAL_USER_ID` environment variable since some Mopidy addons requires write permissions in some files. 
-
-### Example usage:
-```bash
-docker run --name mopidy-server \
+$ docker run --name mopidy-server \
     -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
     -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
     -v ~/.config/pulse/cookie:/home/mopidy/.config/pulse/cookie \
     -v ~/.config/mopidy:/home/mopidy/.config/mopidy \
     -p 127.0.0.1:6600:6600 \
-    -e LOCAL_USER_ID=$(id -u) \
-    mopidy
+    -e USER_ID=$(id -u) \
+    01devmath/mopidy
 ```
 
-In this example:
-- Pulseaudio is used with a shared socket, and my pulseaudio cookie is located in ~/.config/pulse/cookie. You may need to adjust this based on your setup.
-- I'm exposing the MPD port with -p 127.0.0.1:6600:6600 to enable the use of ncmpcpp with Mopidy.
+(Make sure to expose the ports used in your configuration file using the `-p` option in the `docker run` command.)
+
+## Configuration
+### Using a custom Mopidy configuration
+By default, Mopidy will look for its configuration file in `/home/mopidy/.config/mopidy` inside the container. If you want to use a different configuration file or path, you can specify it using the --config flag ([Read Mopidy docs](https://docs.mopidy.com/en/latest/command/)).
+
+You can pass your configuration file or directory using a [bind mount](https://docs.docker.com/storage/bind-mounts/#choose-the--v-or---mount-flag).  
+
+For example, here I'm using the `-v` flag to access my host Mopidy configuration:
+(Note that you may also need to set the `USER_ID` environment variable since some Mopidy addons require write permissions in certain files.)
+
+```bash
+$ docker run \
+	-v ~/.config/mopidy:/home/mopidy/.config/mopidy \
+	-e USER_ID=$(id -u) \
+	# other argumments...
+	01devmath/mopidy
+```
+
+ You can find a Mopidy example configuration to use with this container in my [dotfiles](https://github.com/dev-math/dotfiles/blob/main/dot_config/mopidy/mopidy.conf.tmpl).
 
 
----
+### Mopidy addons
+You can customize the Mopidy installation by specifying additional addons using the `MOPIDY_ADDONS`` environment variable. The addons should be specified following the naming conventions used on PyPI for the respective packages.
+You can find a list of available Mopidy extensions on the [Mopidy Extensions page](https://mopidy.com/ext/).
 
-For more information on setting up sound in Docker with Pulseaudio or ALSA, refer to [Container sound: ALSA or Pulseaudio](https://github.com/mviereck/x11docker/wiki/Container-sound:-ALSA-or-Pulseaudio).
+For example, to install the MPD addon and use YouTube with Mopidy, you can pass the addons with the `-e` flag, like this:
 
-You can find a Mopidy example configuration to use with this container in my [dotfiles](https://github.com/dev-math/dotfiles/blob/main/dot_config/mopidy/mopidy.conf.tmpl).
+```bash
+$ docker run \
+	-e MOPIDY_ADDONS="Mopidy-MPD Mopidy-YouTube mopidy-ytmusic pytube yt-dlp"
+	# other argumments...
+	01devmath/mopidy
+```
+### Setting Up Sound in the Container
+For information on setting up sound in Docker with Pulseaudio or ALSA, refer to [Container sound: ALSA or Pulseaudio](https://github.com/mviereck/x11docker/wiki/Container-sound:-ALSA-or-Pulseaudio).
+
+Note:
+- I'm the ['Example usage'](#example-usage) section, Pulseaudio is used with a shared socket, and my pulseaudio cookie is located in `~/.config/pulse/cookie`. You may need to adjust this based on your setup.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
