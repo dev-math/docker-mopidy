@@ -23,6 +23,7 @@ create_mopidy_user() {
     adduser -u "$USER_ID" -D mopidy
     export HOME=/home/mopidy
     chown mopidy "$HOME"
+    chown -R mopidy "$HOME/.config/mopidy"
 }
 
 main() {
