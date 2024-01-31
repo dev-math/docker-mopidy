@@ -27,13 +27,14 @@ create_mopidy_user() {
 }
 
 main() {
-    set_env_var "USER_ID" "9001"
+    # set_env_var "USER_ID" "9001"
     set_env_var "MOPIDY_ADDONS"
 
     install_mopidy_addons
-    create_mopidy_user
+    # create_mopidy_user
 
-    exec su-exec mopidy "$@"
+    # exec su-exec mopidy "$@"
+    exec "$@"
 }
 
 main "$@"

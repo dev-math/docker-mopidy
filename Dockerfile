@@ -1,6 +1,6 @@
 FROM python:3.12-alpine
 
-WORKDIR /usr/src/mopidy
+WORKDIR /usr/local/src/mopidy
 
 # Install Mopidy requirements
 RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
@@ -21,4 +21,4 @@ RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
 COPY docker-entrypoint.sh .
 
 ENTRYPOINT [ "/usr/src/mopidy/docker-entrypoint.sh" ]
-CMD [ "/usr/local/bin/mopidy" ]
+CMD [ "/usr/local/bin/mopidy", "--config", "/mopidy/config" ]
