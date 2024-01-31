@@ -29,10 +29,9 @@ $ docker run -d --name mopidy-server \
     -e MOPIDY_ADDONS="Mopidy-MPD Mopidy-YouTube mopidy-ytmusic pytube yt-dlp" \
     -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
     -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
-    -v ~/.config/pulse/cookie:/home/mopidy/.config/pulse/cookie \
-    -v ~/.config/mopidy:/home/mopidy/.config/mopidy \
+    -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
+    -v ~/.config/mopidy:/mopidy/config \
     -p 127.0.0.1:6600:6600 \
-    -e USER_ID=$(id -u) \
     01devmath/mopidy
 ```
 
@@ -40,23 +39,20 @@ $ docker run -d --name mopidy-server \
 
 ## Configuration
 ### Using a custom Mopidy configuration
-By default, Mopidy will look for its configuration file in `/home/mopidy/.config/mopidy` inside the container. If you want to use a different configuration file or path, you can specify it using the --config flag ([Read Mopidy docs](https://docs.mopidy.com/en/latest/command/)).
+By default, Mopidy will look for its configuration file in `/mopidy/config` inside the container. If you want to use a different configuration file or path, you can specify it using the --config flag ([Read Mopidy docs](https://docs.mopidy.com/en/latest/command/)).
 
 You can pass your configuration file or directory using a [bind mount](https://docs.docker.com/storage/bind-mounts/#choose-the--v-or---mount-flag).  
 
 For example, here I'm using the `-v` flag to access my host Mopidy configuration:
-(Note that you may also need to set the `USER_ID` environment variable since some Mopidy addons require write permissions in certain files.)
 
 ```bash
 $ docker run \
-	-v ~/.config/mopidy:/home/mopidy/.config/mopidy \
-	-e USER_ID=$(id -u) \
+	-v ~/.config/mopidy:/mopidy/config \
 	# other argumments...
 	01devmath/mopidy
 ```
 
  You can find a Mopidy example configuration to use with this container in my [dotfiles](https://github.com/dev-math/dotfiles/blob/main/dot_config/mopidy/mopidy.conf.tmpl).
-
 
 ### Mopidy addons
 You can customize the Mopidy installation by specifying additional addons using the `MOPIDY_ADDONS`` environment variable. The addons should be specified following the naming conventions used on PyPI for the respective packages.
