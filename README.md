@@ -26,7 +26,7 @@ $ docker pull 01devmath/mopidy
 ### Example usage
 ```bash
 $ docker run -d --name mopidy-server \
-    -e MOPIDY_ADDONS="Mopidy-MPD Mopidy-YouTube mopidy-ytmusic pytube yt-dlp" \
+    -e MOPIDY_ADDONS="Mopidy-MPD==3.3.0 git+https://github.com/natumbri/mopidy-youtube.git@develop#egg=Mopidy-YouTube mopidy-ytmusic==0.3.8 pytube==12.1.3 yt-dlp==2023.12.30" \
     -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
     -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
     -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
@@ -52,10 +52,10 @@ $ docker run \
 	01devmath/mopidy
 ```
 
- You can find a Mopidy example configuration to use with this container in my [dotfiles](https://github.com/dev-math/dotfiles/blob/main/dot_config/mopidy/mopidy.conf.tmpl).
+You can find a Mopidy example configuration to use with this container in my [dotfiles](https://github.com/dev-math/dotfiles/blob/main/dot_config/mopidy/mopidy.conf.tmpl).
 
 ### Mopidy addons
-You can customize the Mopidy installation by specifying additional addons using the `MOPIDY_ADDONS`` environment variable. The addons should be specified following the naming conventions used on PyPI for the respective packages.
+You can customize the Mopidy installation by specifying additional addons using the `MOPIDY_ADDONS` environment variable. The addons should be specified following the naming conventions used on PyPI for the respective packages.
 You can find a list of available Mopidy extensions on the [Mopidy Extensions page](https://mopidy.com/ext/).
 
 For example, to install the MPD addon and use YouTube with Mopidy, you can pass the addons with the `-e` flag, like this:
@@ -70,7 +70,7 @@ $ docker run \
 For information on setting up sound in Docker with Pulseaudio or ALSA, refer to [Container sound: ALSA or Pulseaudio](https://github.com/mviereck/x11docker/wiki/Container-sound:-ALSA-or-Pulseaudio).
 
 Note:
-- I'm the ['Example usage'](#example-usage) section, Pulseaudio is used with a shared socket, and my pulseaudio cookie is located in `~/.config/pulse/cookie`. You may need to adjust this based on your setup.
+- In the ['Example usage'](#example-usage) section, Pulseaudio is used with a shared socket, and my pulseaudio cookie is located in `~/.config/pulse/cookie`. You may need to adjust this based on your setup.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
