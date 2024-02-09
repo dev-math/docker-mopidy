@@ -7,6 +7,7 @@ RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
     apk add --no-cache --virtual build-dependencies python3-dev gcc libc-dev \
     cairo-dev gobject-introspection gobject-introspection-dev \
     && apk add --no-cache \
+        git \
         gstreamer \
         py3-gobject3 \
         py3-gst \
